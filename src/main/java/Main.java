@@ -15,8 +15,12 @@ Poniższe zadania będą się sprowadzały do modyfikacji bazowego kodu. Proces 
 import java.io.IOException;
 import java.util.Scanner;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date; 
 
 class WrongStudentName extends Exception { }
+class WrongAge extends Exception { }
+class WrongDateOfBirth extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -35,7 +39,12 @@ class Main {
 
             } catch(WrongStudentName e) {
                 System.out.println("Błędne imie studenta!");
+            } catch(WrongAge e) {
+                System.out.println("Błędny wiek studenta!");
+            } catch(WrongDateOfBirth e) {
+                System.out.println("Błędna data urodzenia studenta!");
             }
+
         }
     }
 
@@ -58,13 +67,17 @@ class Main {
         return name;
     }
 
-    public static void exercise1() throws IOException, WrongStudentName {
+    public static void exercise1() throws IOException, WrongStudentName, WrongAge, WrongDateOfBirth {
         var name = ReadName();
         System.out.println("Podaj wiek: ");
         var age = scan.nextInt();
+        if(age < 0 || age > 100)
+            throw new WrongAge();
         scan.nextLine();
         System.out.println("Podaj datę urodzenia DD-MM-YYY");
         var date = scan.nextLine();
+        if(!date.matches("\\d{2}-\\d{2}-\\d{4}"))
+            throw new WrongDateOfBirth();
         (new Service()).addStudent(new Student(name, age, date));
     }
 
